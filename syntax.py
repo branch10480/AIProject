@@ -34,9 +34,15 @@ def main():
     dict = {"one": 1, "two": 2, "three": 3}
     print(dict)
 
-    print("For文")
+    print("For文 - list")
     for item in list:
         print(item)
+
+    # dictのforとjoin
+    print("For文 - dict")
+    print(", ".join(dict.keys()))
+    for key in dict:
+        print(dict[key])
 
 
 # importしただけでは実行されないようにするためにこの判定を書く
