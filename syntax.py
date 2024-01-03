@@ -44,6 +44,18 @@ def main():
     for key in dict:
         print(dict[key])
 
+    # range
+    print("For文 - range")
+    for i in range(0, 5):
+        print(i)
+
+    odd = []
+    for i in range(0, 10):
+        if i % 2 != 0:
+            odd.append(i)
+    print("奇数")
+    print(odd)
+
 
 # importしただけでは実行されないようにするためにこの判定を書く
 # このファイルが直接実行された場合は __name__ に __main__ が入る
