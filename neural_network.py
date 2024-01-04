@@ -8,7 +8,7 @@ def main():
 
 
 def sigmoid(x):
-    return 1.0 / (1.0 + np.exp(-x))  # エクスポネンシャル (exp) 関数
+    return 1.0 / (1.0 + np.exp(-x))  # エクスポネンシャル (exp) 関数: eのべき乗
 
 
 class Neuron:
