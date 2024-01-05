@@ -39,3 +39,9 @@ class NeuralNetwork:
 
 def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))  # エクスポネンシャル (exp) 関数: eのべき乗
+
+
+# シグモイド関数の微分
+def df_sigmoid(x):
+    return sigmoid(x) * (1 - sigmoid(x))
+
