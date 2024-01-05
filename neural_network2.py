@@ -52,17 +52,17 @@ def main():
 class NeuralNetwork:
     def __init__(self):
         # 重み
-        self.w_im = [[4.0, 4.0], [4.0, 4.0]]  # 入力2, ニューロン数2
-        self.w_mo = [[1.0, -1.0]]             # 入力2, ニューロン数1
+        self.w_im = [[4.0, 4.0], [4.0, 4.0], [4.0, 4.0]]  # 入力2, ニューロン数3
+        self.w_mo = [[1.0, -1.0, 1.0]]                    # 入力3, ニューロン数1
 
         # バイアス
-        self.b_m = [2.0, -2.0]                # ニューロン数2
+        self.b_m = [3.0, 0.0, -3.0]           # ニューロン数3
         self.b_o = [-0.5]                     # ニューロン数1
 
         # 各層の宣言
-        self.input_layer = [0.0, 0.0]              # 入力層
-        self.middle_layer = [Neuron(), Neuron()]   # 中間層
-        self.output_layer = [Neuron()]             # 出力層
+        self.input_layer = [0.0, 0.0]                        # 入力層
+        self.middle_layer = [Neuron(), Neuron(), Neuron()]   # 中間層
+        self.output_layer = [Neuron()]                       # 出力層
 
     def commit(self, input_data):
         # 各層のリセット
@@ -70,6 +70,7 @@ class NeuralNetwork:
         self.input_layer[1] = input_data[1]
         self.middle_layer[0].reset()
         self.middle_layer[1].reset()
+        self.middle_layer[2].reset()
         self.output_layer[0].reset()
 
         # 入力層→中間層
@@ -81,9 +82,14 @@ class NeuralNetwork:
         self.middle_layer[1].set_input(self.input_layer[1] * self.w_im[1][1])
         self.middle_layer[1].set_input(self.b_m[1])
 
+        self.middle_layer[2].set_input(self.input_layer[0] * self.w_im[2][0])
+        self.middle_layer[2].set_input(self.input_layer[1] * self.w_im[2][1])
+        self.middle_layer[2].set_input(self.b_m[2])
+
         # 中間層→出力層
         self.output_layer[0].set_input(self.middle_layer[0].get_output() * self.w_mo[0][0])
         self.output_layer[0].set_input(self.middle_layer[1].get_output() * self.w_mo[0][1])
+        self.output_layer[0].set_input(self.middle_layer[2].get_output() * self.w_mo[0][2])
         self.output_layer[0].set_input(self.b_o[0])
 
         return self.output_layer[0].get_output()
