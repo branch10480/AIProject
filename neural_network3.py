@@ -2,12 +2,14 @@ from neuron import Neuron
 from sklearn import datasets
 import matplotlib.pyplot as plt
 import numpy as np
+from neuron import df_sigmoid
 
 
 # 入力層、中間層、出力層の3層構造にする
 
 def main():
-    data = datasets.load_iris().data
+    iris = datasets.load_iris()
+    data = iris.data
     sl_data = data[:100, 0]  # Sepal Length (Setosa, Versicolor)
     sw_data = data[:100, 1]  # Sepal Width (Setosa, Versicolor)
 
@@ -20,7 +22,8 @@ def main():
     # 入力をリストに格納する
     input_data = []
     for i in range(len(sl_data)):
-        input_data.append((sl_data[i], sw_data[i]))
+        correct = iris.target[i]
+        input_data.append((sl_data[i], sw_data[i], correct))
 
     nw = NeuralNetwork()
 
@@ -47,6 +50,21 @@ def main():
     plt.legend()
 
     plt.show()
+
+    # 学習によるパラメータの変化
+    print("----------- Before training -----------")
+    print(nw.w_im)
+    print(nw.w_mo)
+    print(nw.b_m)
+    print(nw.b_o)
+    nw.commit(input_data[0][:2])        # 1つ目のデータで実行、順伝播
+    nw.train(input_data[0][2])          # 1つ目のデータで学習、逆伝播
+
+    print("----------- After training -----------")
+    print(nw.w_im)
+    print(nw.w_mo)
+    print(nw.b_m)
+    print(nw.b_o)
 
 
 class NeuralNetwork:
@@ -87,6 +105,24 @@ class NeuralNetwork:
         self.output_layer[0].set_input(self.b_o[0])
 
         return self.output_layer[0].get_output()
+
+
+    def train(self, correct):
+        # 学習係数
+        k = 0.3
+
+        # 出力
+        output_o = self.output_layer[0].get_output()
+        output_m0 = self.middle_layer[0].get_output()
+        output_m1 = self.middle_layer[1].get_output()
+
+        # δ
+        delta_o = (output_o - correct) * df_sigmoid(output_o)
+
+        # パラメータの更新
+        self.b_o[0] += -k * delta_o
+        self.w_mo[0][0] += -k * delta_o * output_m0
+        self.w_mo[0][1] += -k * delta_o * output_m1
 
 
 if __name__ == '__main__':
