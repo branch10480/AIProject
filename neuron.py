@@ -12,7 +12,6 @@ class Neuron:
 
     def set_input(self, inp):
         self.input_sum += inp
-        print(self.input_sum)
 
     def get_output(self):
         self.output = sigmoid(self.input_sum)
@@ -43,5 +42,5 @@ def sigmoid(x):
 
 # シグモイド関数の微分
 def df_sigmoid(x):
-    return sigmoid(x) * (1 - sigmoid(x))
+    return x * (1.0 - x)
 

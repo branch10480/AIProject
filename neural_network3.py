@@ -118,11 +118,21 @@ class NeuralNetwork:
 
         # δ
         delta_o = (output_o - correct) * df_sigmoid(output_o)
+        delta_m0 = delta_o * self.w_mo[0][0] * df_sigmoid(output_m0)
+        delta_m1 = delta_o * self.w_mo[0][1] * df_sigmoid(output_m1)
 
         # パラメータの更新
+        # 出力層
         self.b_o[0] += -k * delta_o
         self.w_mo[0][0] += -k * delta_o * output_m0
         self.w_mo[0][1] += -k * delta_o * output_m1
+        # 中間層
+        self.b_m[0] += -k * delta_m0
+        self.b_m[1] += -k * delta_m1
+        self.w_im[0][0] += -k * delta_m0 * self.input_layer[0]
+        self.w_im[0][1] += -k * delta_m0 * self.input_layer[1]
+        self.w_im[1][0] += -k * delta_m1 * self.input_layer[0]
+        self.w_im[1][1] += -k * delta_m1 * self.input_layer[1]
 
 
 if __name__ == '__main__':
