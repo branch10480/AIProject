@@ -26,12 +26,12 @@ def main():
     nw = NeuralNetwork()
 
     # 学習と結果の表示
-    for i in range(0, 32):
+    for i in range(0, 64):
         random.shuffle(input_data)  # データをシャッフル
         for data in input_data:
             nw.commit(data[:2])  # 順伝播
             nw.train(data[2])  # 逆伝播
-        if i + 1 in [1, 2, 4, 8, 16, 32]:
+        if i + 1 in [1, 2, 4, 8, 16, 32, 64]:
             draw_graph(i + 1, nw, sl_avg, sw_avg, input_data)
 
     # 比較用に元の分類を散布図で表示
