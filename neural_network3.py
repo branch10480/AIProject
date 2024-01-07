@@ -3,6 +3,7 @@ from sklearn import datasets
 import matplotlib.pyplot as plt
 import numpy as np
 from neuron import df_sigmoid
+import random
 
 
 # 入力層、中間層、出力層の3層構造にする
@@ -27,6 +28,30 @@ def main():
 
     nw = NeuralNetwork()
 
+    # 学習と結果の表示
+    for i in range(0, 32):
+        random.shuffle(input_data)  # データをシャッフル
+        for data in input_data:
+            nw.commit(data[:2])        # 順伝播
+            nw.train(data[2])          # 逆伝播
+        if i+1 in [1, 2, 4, 8, 16, 32]:
+            draw_graph(i+1, nw, sl_avg, sw_avg, input_data)
+
+    # 比較用に元の分類を散布図で表示
+    st_data = iris.data[:50]  # Sepal Length (Setosa)
+    vc_data = iris.data[50:100]  # Sepal Length (Versicolor)
+    plt.scatter(st_data[:, 0], st_data[:, 1], label="Setosa")
+    plt.scatter(vc_data[:, 0], vc_data[:, 1], label="Versicolor")
+    plt.legend()
+
+    plt.xlabel("Sepal Length (cm)")
+    plt.ylabel("Sepal Width (cm)")
+    plt.title("Original")
+    plt.show()
+
+
+def draw_graph(epoch, nw, sl_avg, sw_avg, input_data):
+    print("Epoch:", epoch)
     # 実行
     st_predicted = [[], []]  # Setosa
     vc_predicted = [[], []]  # Versicolor
@@ -38,11 +63,12 @@ def main():
             vc_predicted[0].append(data[0] + sl_avg)
             vc_predicted[1].append(data[1] + sw_avg)
 
-    plt.title("Classify")
+    plt.title("Classify - Epoch: " + str(epoch))
 
     plt.xlabel("Sepal Length (cm)")
     plt.ylabel("Sepal Width (cm)")
 
+    # 分類結果をグラフ表示
     plt.scatter(st_predicted[0], st_predicted[1], label="Setosa")
     plt.scatter(vc_predicted[0], vc_predicted[1], label="Versicolor")
 
@@ -51,20 +77,6 @@ def main():
 
     plt.show()
 
-    # 学習によるパラメータの変化
-    print("----------- Before training -----------")
-    print(nw.w_im)
-    print(nw.w_mo)
-    print(nw.b_m)
-    print(nw.b_o)
-    nw.commit(input_data[0][:2])        # 1つ目のデータで実行、順伝播
-    nw.train(input_data[0][2])          # 1つ目のデータで学習、逆伝播
-
-    print("----------- After training -----------")
-    print(nw.w_im)
-    print(nw.w_mo)
-    print(nw.b_m)
-    print(nw.b_o)
 
 
 class NeuralNetwork:
