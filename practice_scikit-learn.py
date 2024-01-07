@@ -1,5 +1,4 @@
-import numpy as np
-import sklearn.datasets as datasets
+from sklearn import datasets
 import matplotlib.pyplot as plt
 
 
