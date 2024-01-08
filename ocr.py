@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-from sklearn import datasets, svm
+from sklearn import datasets, svm, metrics
+from sklearn.model_selection import train_test_split
 
 
 def main():
@@ -33,9 +34,26 @@ def main():
     # 手書き文字の分類
     # データ全体を train_test_split を使って訓練データとテストデータに分ける
 
+    # 訓練データとテストデータに分割
+    digits = datasets.load_digits()
+    x_train, x_test, y_train, y_test = train_test_split(digits.data, digits.target)
 
-def train_test_split(data):
-    return
+    clf = svm.SVC()
+    clf.fit(x_train, y_train)
+
+    y_test_pred = clf.predict(x_test)   # テストデータで予測を行う
+    print(metrics.classification_report(y_test, y_test_pred))   # 正解率など
+    print(metrics.confusion_matrix(y_test, y_test_pred))        # 行：正解、列：予測
+
+    # 予測結果と画像の対応
+    images = digits.images[:10]     # 最初の10枚
+    y_10 = clf.predict(digits.data[:10])    # 最初の10枚の予測結果
+    for i in range(10):
+        plt.subplot(2, 5, i + 1)
+        plt.imshow(images[i], cmap="Greys")
+        plt.axis("off")
+        plt.title("Predict: " + str(y_10[i]))
+    plt.show()
 
 
 '''
